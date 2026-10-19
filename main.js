@@ -1,5 +1,50 @@
 /* Dice Dreams Fan Hub — shared scripts (all features guard on element presence) */
 (function () {
+  /* Cookie / EU-consent banner — auto-injected on every page.
+     Records the visitor's choice in localStorage and pushes it to Google's
+     consent mode where gtag is available (ads + analytics storage). */
+  (function cookieConsent() {
+    var KEY = '***';
+    function setConsent(state) {
+      if (typeof window.gtag === 'function') {
+        window.gtag('consent', 'update', { ad_storage: state, analytics_storage: state });
+      }
+    }
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) { saved = null; }
+    if (saved === 'granted') { setConsent('granted'); return; }
+    if (saved === 'denied') { setConsent('denied'); return; }
+
+    var bar = document.createElement('div');
+    bar.className = 'cookie-banner';
+    bar.setAttribute('role', 'dialog');
+    bar.setAttribute('aria-live', 'polite');
+    bar.setAttribute('aria-label', 'Cookie consent');
+    bar.innerHTML =
+      '<div class="cb-copy"><strong>We use cookies.</strong> We use essential cookies and, with your consent, ' +
+      'third-party cookies for advertising and analytics to help us improve the guide. ' +
+      'Read our <a href="privacy-policy.html">Privacy Policy</a>.</div>' +
+      '<div class="cb-actions">' +
+      '<button type="button" class="cb-btn cb-decline" data-choice="denied">Decline</button>' +
+      '<button type="button" class="cb-btn cb-accept" data-choice="granted">Accept</button>' +
+      '</div>';
+    document.body.appendChild(bar);
+
+    // Give Google a chance to pick up a default before the first ad request.
+    setConsent('denied');
+    requestAnimationFrame(function () { bar.classList.add('show'); });
+
+    bar.addEventListener('click', function (ev) {
+      var btn = ev.target.closest ? ev.target.closest('.cb-btn') : null;
+      if (!btn) return;
+      var choice = btn.getAttribute('data-choice');
+      try { localStorage.setItem(KEY, choice); } catch (e) { /* private mode: ignore */ }
+      setConsent(choice);
+      bar.classList.remove('show');
+      bar.style.display = 'none';
+    });
+  })();
+
   /* Section fade-in (panels are visible via <noscript> fallback if JS is off) */
   var panels = document.querySelectorAll('.section-panel');
   if ('IntersectionObserver' in window) {

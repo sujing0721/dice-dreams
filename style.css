@@ -391,3 +391,34 @@ footer .flinks a{color:var(--gold); text-decoration:underline;}
   nav.pills a{font-size:0.74rem; padding:6px 10px;}
   .tip-of-day{flex-direction:column; align-items:flex-start; gap:8px;}
 }
+
+/* ---------- cookie / EU-consent banner ---------- */
+.cookie-banner{
+  position:fixed; left:16px; right:16px; bottom:16px; z-index:100;
+  max-width:var(--maxw); margin:0 auto;
+  background:rgba(12,20,53,0.97);
+  border:1px solid var(--gold);
+  border-radius:14px;
+  box-shadow:0 24px 48px -20px rgba(0,0,0,0.7);
+  color:var(--cloud);
+  padding:18px 20px;
+  display:none; align-items:flex-start; gap:16px;
+  flex-wrap:wrap;
+}
+.cookie-banner.show{display:flex;}
+.cookie-banner .cb-copy{flex:1 1 320px; font-size:0.88rem; line-height:1.55; color:var(--cloud-dim);}
+.cookie-banner .cb-copy strong{color:var(--cloud);}
+.cookie-banner .cb-copy a{color:var(--gold); text-decoration:underline;}
+.cookie-banner .cb-actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+.cookie-banner .cb-btn{
+  appearance:none; font-family:'Work Sans',sans-serif; font-weight:700; font-size:0.85rem;
+  padding:9px 16px; border-radius:9px; cursor:pointer; border:1.5px solid transparent;
+  transition:transform .15s ease, background .15s ease;
+}
+.cookie-banner .cb-btn:hover{transform:translateY(-1px);}
+.cookie-banner .cb-accept{background:var(--gold); color:var(--ink);}
+.cookie-banner .cb-decline{background:transparent; border-color:rgba(244,241,255,0.4); color:var(--cloud);}
+@media (max-width:820px){
+  .cookie-banner{flex-direction:column; align-items:stretch; left:10px; right:10px; bottom:10px;}
+  .cookie-banner .cb-actions{justify-content:flex-start;}
+}
